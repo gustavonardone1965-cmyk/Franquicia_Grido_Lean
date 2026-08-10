@@ -18,13 +18,11 @@ const CROSS_ORIGIN_ASSETS = [
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME);
-    // Cachear recursos locales; capturar errores para no abortar la instalación
     try {
       await cache.addAll(ASSETS_TO_CACHE);
     } catch (err) {
       console.warn('Error cacheando recursos locales:', err);
     }
-    // Intentar cachear recursos cross-origin de forma tolerante
     for (const url of CROSS_ORIGIN_ASSETS) {
       try {
         const resp = await fetch(url, { mode: 'no-cors' });
