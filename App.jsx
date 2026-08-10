@@ -1,161 +1,98 @@
-import React, { useState } from 'react';
-import { 
-  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, 
-  Tooltip, Legend, ResponsiveContainer 
-} from 'recharts';
+// App.jsx (colocar en la raíz tal como lo nombraste)
+// Este archivo usa React 18 UMD y Babel en el navegador (solo para desarrollo).
+const { useState, useEffect } = React;
 
-const META_DEFAULT = {
-  sdsMin: -3,
-  sdsMax: 5,
-  eficienciaMin: 22,
-  ticketDeltaPct: 10,
-  mermaMaxPct: 2,
-  quiebresMax: 1
-};
-
-export default function DashboardGridoResponsive() {
-  const [franquiciaSeleccionada, setFranquiciaSeleccionada] = useState('Belgrano');
-  const [vistaMovilActiva, setVistaMovilActiva] = useState('kpis');
-
-  const datosSemanales = [
-    { semana: 'S0', sds: 2, eficiencia: 20, ticket: 1500 },
-    { semana: 'S1', sds: 4, eficiencia: 23, ticket: 1620 },
-    { semana: 'S2', sds: -1, eficiencia: 25, ticket: 1700 },
-  ];
-
+function Header() {
   return (
-    <div className="w-full min-h-screen bg-gray-50 p-3 md:p-6 text-gray-800 font-sans">
-      
-      {/* Encabezado Adaptativo */}
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 bg-white p-4 rounded-lg shadow-sm">
-        <div>
-          <h1 className="text-xl md:text-2xl font-bold text-blue-900">GRIDO · PILOTO LEAN</h1>
-          <p className="text-xs md:text-sm text-gray-500">Panel de Control de Franquicias</p>
-        </div>
-        
-        <select 
-          value={franquiciaSeleccionada}
-          onChange={(e) => setFranquiciaSeleccionada(e.target.value)}
-          className="w-full sm:w-auto px-4 py-2 border rounded-md bg-white text-sm font-medium border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="Belgrano">Franquicia Belgrano</option>
-          <option value="Villa Allende">Franquicia Villa Allende</option>
-          <option value="Alta Córdoba">Franquicia Alta Córdoba</option>
-        </select>
-      </header>
-
-      {/* Navegación para Pantallas Móviles */}
-      <div className="flex lg:hidden mb-4 border-b border-gray-200 bg-white rounded-t-lg">
-        <button 
-          onClick={() => setVistaMovilActiva('kpis')}
-          className={`flex-1 py-3 text-xs font-bold text-center border-b-2 ${vistaMovilActiva === 'kpis' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500'}`}
-        >
-          KPIs
-        </button>
-        <button 
-          onClick={() => setVistaMovilActiva('graficos')}
-          className={`flex-1 py-3 text-xs font-bold text-center border-b-2 ${vistaMovilActiva === 'graficos' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500'}`}
-        >
-          GRÁFICOS
-        </button>
-        <button 
-          onClick={() => setVistaMovilActiva('ishikawa')}
-          className={`flex-1 py-3 text-xs font-bold text-center border-b-2 ${vistaMovilActiva === 'ishikawa' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500'}`}
-        >
-          DIAGNÓSTICO
-        </button>
+    <header style={styles.header}>
+      <img src="/grido_lean.png" alt="Grido Lean" style={styles.logo} />
+      <div>
+        <h1 style={styles.title}>Grido · Piloto Lean en Franquicias</h1>
+        <p style={styles.subtitle}>Panel de control y métricas básicas</p>
       </div>
+    </header>
+  );
+}
 
-      {/* Grid de KPIs - Tarjetas Flexibles */}
-      <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 ${vistaMovilActiva !== 'kpis' ? 'hidden lg:grid' : ''}`}>
-        <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-600">
-          <span className="text-xs font-semibold text-gray-400 uppercase">Eficiencia Operativa</span>
-          <div className="text-2xl font-bold text-gray-800 mt-1">23.5 <span className="text-xs font-normal text-gray-500">porc/h</span></div>
-          <span className="text-xs text-green-600 font-semibold">Meta: &gt; {META_DEFAULT.eficienciaMin} porc/h</span>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500">
-          <span className="text-xs font-semibold text-gray-400 uppercase">SDS (Señal Desvío)</span>
-          <div className="text-2xl font-bold text-gray-800 mt-1">+2.0</div>
-          <span className="text-xs text-gray-500">Rango: {META_DEFAULT.sdsMin} a {META_DEFAULT.sdsMax}</span>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-yellow-500">
-          <span className="text-xs font-semibold text-gray-400 uppercase">Ticket Medio</span>
-          <div className="text-2xl font-bold text-gray-800 mt-1">$1.620</div>
-          <span className="text-xs text-green-600 font-semibold">+8% vs Obj.</span>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-500">
-          <span className="text-xs font-semibold text-gray-400 uppercase">Merma Acumulada</span>
-          <div className="text-2xl font-bold text-gray-800 mt-1">1.4%</div>
-          <span className="text-xs text-gray-500">Max: {META_DEFAULT.mermaMaxPct}%</span>
-        </div>
-      </div>
-
-      {/* Gráficos Adaptativos */}
-      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 ${vistaMovilActiva !== 'graficos' ? 'hidden lg:grid' : ''}`}>
-        <div className="bg-white p-4 rounded-lg shadow-sm">
-          <h3 className="text-sm font-bold text-gray-700 mb-4">Evolución Eficiencia vs Meta</h3>
-          <div className="w-full h-64 md:h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={datosSemanales} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="semana" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip />
-                <Legend wrapperStyle={{ fontSize: '12px' }} />
-                <Bar dataKey="eficiencia" name="Eficiencia (porc/h)" fill="#2563eb" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow-sm">
-          <h3 className="text-sm font-bold text-gray-700 mb-4">Comportamiento SDS por Semana</h3>
-          <div className="w-full h-64 md:h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={datosSemanales} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="semana" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip />
-                <Line type="monotone" dataKey="sds" name="SDS" stroke="#16a34a" strokeWidth={2} dot={{ r: 4 }} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
-
-      {/* Tabla con Scroll Horizontal para Móviles */}
-      <div className={`bg-white p-4 rounded-lg shadow-sm ${vistaMovilActiva !== 'ishikawa' ? 'hidden lg:block' : ''}`}>
-        <h3 className="text-sm font-bold text-gray-700 mb-3">Plan de Acción y Métodos Lean</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[600px]">
-            <thead>
-              <tr className="border-b bg-gray-50 text-xs font-semibold text-gray-500 uppercase">
-                <th className="p-3">Herramienta</th>
-                <th className="p-3">Estado Adopción</th>
-                <th className="p-3">Acción Corrección</th>
-                <th className="p-3">Responsable</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 text-sm">
-              <tr>
-                <td className="p-3 font-medium text-gray-800">5S (Estandarización)</td>
-                <td className="p-3"><span className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full font-semibold">85%</span></td>
-                <td className="p-3 text-gray-600">Auditoría semanal de puestos.</td>
-                <td className="p-3 text-gray-600">Encargado Belgrano</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-medium text-gray-800">Kanban Reposición</td>
-                <td className="p-3"><span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full font-semibold">60%</span></td>
-                <td className="p-3 text-gray-600">Ajuste de stock mínimo en mostrador.</td>
-                <td className="p-3 text-gray-600">Líder Turno</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p className="text-xs text-gray-400 mt-2 block lg:hidden">* Deslice horizontalmente para evaluar la tabla completa.</p>
-      </div>
-
+function CounterCard() {
+  const [count, setCount] = useState(0);
+  return (
+    <div style={styles.card}>
+      <h3>Contador de pruebas</h3>
+      <p>Usa este botón para verificar interactividad y renderizado.</p>
+      <button onClick={() => setCount(c => c + 1)} style={styles.button}>
+        Clicks: {count}
+      </button>
     </div>
   );
+}
+
+function MetricsCard() {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    // Simula carga de datos (reemplaza por fetch real si tienes API)
+    const t = setTimeout(() => {
+      setData({
+        ventasHoy: 12,
+        tickets: 34,
+        promedio: 8.5
+      });
+    }, 600);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (!data) {
+    return <div style={styles.card}><em>Cargando métricas...</em></div>;
+  }
+
+  return (
+    <div style={styles.card}>
+      <h3>Métricas rápidas</h3>
+      <ul>
+        <li><strong>Ventas hoy:</strong> {data.ventasHoy}</li>
+        <li><strong>Tickets:</strong> {data.tickets}</li>
+        <li><strong>Ticket promedio:</strong> ${data.promedio}</li>
+      </ul>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div style={styles.app}>
+      <Header />
+      <main style={styles.main}>
+        <div style={styles.grid}>
+          <CounterCard />
+          <MetricsCard />
+        </div>
+        <footer style={styles.footer}>
+          <small>Desarrollado para prueba PWA · Grido Lean</small>
+        </footer>
+      </main>
+    </div>
+  );
+}
+
+// Estilos en línea simples para evitar dependencias
+const styles = {
+  app: { fontFamily: 'Arial, sans-serif', color: '#1A2C42' },
+  header: { display: 'flex', alignItems: 'center', gap: 16, padding: 20, borderBottom: '1px solid #eee' },
+  logo: { width: 64, height: 64, objectFit: 'contain' },
+  title: { margin: 0, fontSize: 20 },
+  subtitle: { margin: 0, color: '#666' },
+  main: { padding: 20 },
+  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 },
+  card: { padding: 16, border: '1px solid #eee', borderRadius: 8, background: '#fff' },
+  button: { padding: '8px 12px', background: '#1A2C42', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer' },
+  footer: { marginTop: 20, textAlign: 'center', color: '#888' }
+};
+
+// Montaje seguro
+const root = document.getElementById('root');
+if (root) {
+  ReactDOM.createRoot(root).render(React.createElement(App));
+} else {
+  console.error('No se encontró #root. Asegúrate de que index.html tenga <div id="root">');
 }
