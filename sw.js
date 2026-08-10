@@ -3,7 +3,8 @@ const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/grido_lean.png'
+  '/grido_lean.png',
+  '/App.jsx'
 ];
 
 const CROSS_ORIGIN_ASSETS = [
@@ -15,26 +16,24 @@ const CROSS_ORIGIN_ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    (async () => {
-      const cache = await caches.open(CACHE_NAME);
-      // Cachear recursos locales; si falla, la instalación fallará y no se activará el SW
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    // Cachear recursos locales; capturar errores para no abortar la instalación
+    try {
+      await cache.addAll(ASSETS_TO_CACHE);
+    } catch (err) {
+      console.warn('Error cacheando recursos locales:', err);
+    }
+    // Intentar cachear recursos cross-origin de forma tolerante
+    for (const url of CROSS_ORIGIN_ASSETS) {
       try {
-        await cache.addAll(ASSETS_TO_CACHE);
+        const resp = await fetch(url, { mode: 'no-cors' });
+        await cache.put(url, resp);
       } catch (err) {
-        console.warn('Error cacheando recursos locales:', err);
+        console.warn('No se pudo cachear recurso externo:', url, err);
       }
-      // Intentar cachear recursos cross-origin de forma tolerante
-      for (const url of CROSS_ORIGIN_ASSETS) {
-        try {
-          const resp = await fetch(url, { mode: 'no-cors' });
-          await cache.put(url, resp);
-        } catch (err) {
-          console.warn('No se pudo cachear recurso externo:', url, err);
-        }
-      }
-    })()
-  );
+    }
+  })());
   self.skipWaiting();
 });
 
