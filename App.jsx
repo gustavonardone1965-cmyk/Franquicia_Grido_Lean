@@ -1,5 +1,5 @@
 // App.jsx (colocar en la raíz tal como lo nombraste)
-// Este archivo usa React 18 UMD y Babel en el navegador (solo para desarrollo).
+// Diseñado para funcionar con React 18 UMD y Babel en el navegador (solo para desarrollo).
 const { useState, useEffect } = React;
 
 function Header() {
