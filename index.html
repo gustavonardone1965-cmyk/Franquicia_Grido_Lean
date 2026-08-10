@@ -1,36 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Grido · Piloto Lean en Franquicias</title>
-
-  <!-- Librerías de React y Babel desde CDN -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f6f8; }
-    .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-  </style>
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#1A2C42" />
 </head>
 <body>
-  <div id="root"></div>
+  <div id="root">Cargando...</div>
 
-  <!-- Código de React embebido para evitar fallos de carga externa -->
-  <script type="text/babel">
-    function App() {
-      return (
-        <div className="card">
-          <h2>Grido · Piloto Lean en Franquicias</h2>
-          <p>Tablero de control e indicadores operativos activo correctamente.</p>
-        </div>
-      );
+  <!-- Si usas React UMD + Babel en desarrollo -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tu App.jsx (si lo usas con type="text/babel" en desarrollo) -->
+  <script type="text/babel" src="/App.jsx"></script>
+
+  <!-- Registro del service worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('SW registrado:', reg.scope))
+        .catch(err => console.warn('Error registrando SW:', err));
     }
-
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
   </script>
 </body>
 </html>
