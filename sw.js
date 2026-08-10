@@ -1,10 +1,10 @@
-const CACHE_NAME = 'grido-lean-v1';
+const CACHE_NAME = 'grido-lean-v2';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/grido_lean.png',
-  '/App.jsx'
+  './',
+  './index.html',
+  './manifest.json',
+  './grido_lean.png',
+  './App.jsx'
 ];
 
 const CROSS_ORIGIN_ASSETS = [
@@ -56,7 +56,7 @@ self.addEventListener('fetch', (event) => {
       if (response) return response;
       return fetch(event.request).catch(() => {
         if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
+          return caches.match('./index.html');
         }
       });
     })
