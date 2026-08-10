@@ -10,20 +10,20 @@
 <body>
   <div id="root">Cargando...</div>
 
-  <!-- Si usas React UMD + Babel en desarrollo -->
+  <!-- Dependencias UMD (si trabajas en desarrollo sin build) -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <!-- Tu App.jsx (si lo usas con type="text/babel" en desarrollo) -->
+  <!-- Tu App.jsx (si lo usas en desarrollo con type="text/babel") -->
   <script type="text/babel" src="/App.jsx"></script>
 
   <!-- Registro del service worker -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('SW registrado:', reg.scope))
-        .catch(err => console.warn('Error registrando SW:', err));
+        .then(reg => console.log('Service Worker registrado con scope:', reg.scope))
+        .catch(err => console.warn('Error registrando Service Worker:', err));
     }
   </script>
 </body>
