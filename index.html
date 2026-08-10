@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Grido · Piloto Lean en Franquicias</title>
-  <link rel="manifest" href="/manifest.json" />
+  <link rel="manifest" href="./manifest.json" />
   <meta name="theme-color" content="#1A2C42" />
 </head>
 <body>
@@ -15,13 +15,13 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <!-- Tu App.jsx en desarrollo -->
-  <script type="text/babel" src="/App.jsx"></script>
+  <!-- App.jsx en desarrollo (ruta relativa) -->
+  <script type="text/babel" src="./App.jsx"></script>
 
-  <!-- Registro del service worker -->
+  <!-- Registro del service worker (ruta relativa) -->
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
+      navigator.serviceWorker.register('./sw.js')
         .then(reg => console.log('Service Worker registrado con scope:', reg.scope))
         .catch(err => console.warn('Error registrando Service Worker:', err));
     }
