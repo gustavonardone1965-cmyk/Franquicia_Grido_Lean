@@ -1,3 +1,31 @@
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#0052cc">
-<link rel="apple-touch-icon" href="/icon-192.png">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Aplicación PWA</title>
+
+  <!-- Configuración PWA y Metadatos -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0052cc">
+  <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+
+  <!-- Contenido visible de la aplicación -->
+  <main>
+    <h1>Aplicación Operativa</h1>
+    <p>Bienvenido a la PWA. El despliegue en Vercel se ha completado con éxito.</p>
+  </main>
+
+  <!-- Registro del Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js');
+      });
+    }
+  </script>
+
+</body>
+</html>
