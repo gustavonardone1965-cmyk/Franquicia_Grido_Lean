@@ -5,7 +5,7 @@ const { useState, useEffect } = React;
 function Header() {
   return (
     <header style={styles.header}>
-      <img src="/grido_lean.png" alt="Grido Lean" style={styles.logo} />
+      <img src="./grido_lean.png" alt="Grido Lean" style={styles.logo} />
       <div>
         <h1 style={styles.title}>Grido · Piloto Lean en Franquicias</h1>
         <p style={styles.subtitle}>Panel de control y métricas básicas</p>
@@ -31,7 +31,6 @@ function MetricsCard() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    // Simula carga de datos (reemplaza por fetch real si tienes API)
     const t = setTimeout(() => {
       setData({
         ventasHoy: 12,
@@ -75,7 +74,6 @@ function App() {
   );
 }
 
-// Estilos en línea simples para evitar dependencias
 const styles = {
   app: { fontFamily: 'Arial, sans-serif', color: '#1A2C42' },
   header: { display: 'flex', alignItems: 'center', gap: 16, padding: 20, borderBottom: '1px solid #eee' },
@@ -89,7 +87,6 @@ const styles = {
   footer: { marginTop: 20, textAlign: 'center', color: '#888' }
 };
 
-// Montaje seguro
 const root = document.getElementById('root');
 if (root) {
   ReactDOM.createRoot(root).render(React.createElement(App));
